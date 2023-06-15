@@ -62,7 +62,7 @@ public class Cola {
         return size == 0;
     }
 
-    public Object readHead() {
+    public Vehiculo readHead() {
         return this.first;   //tenia this.first.info
     }
 
