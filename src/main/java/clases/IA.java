@@ -12,7 +12,9 @@ import java.util.concurrent.Semaphore;
  */
 public class IA extends Thread{
     
-    public Semaphore mutex;    
+    public Semaphore mutex;
+    private Vehiculo lamborghini;
+    private Vehiculo bugatti;
     
     public IA(Semaphore mutex) {
         this.mutex = mutex;
@@ -23,6 +25,20 @@ public class IA extends Thread{
         while(true) {
             
         }
+    }
+
+    /**
+     * @param lamborghini the lamborghini to set
+     */
+    public void setLamborghini(Vehiculo lamborghini) {
+        this.lamborghini = lamborghini;
+    }
+
+    /**
+     * @param bugatti the bugatti to set
+     */
+    public void setBugatti(Vehiculo bugatti) {
+        this.bugatti = bugatti;
     }
     
 }
