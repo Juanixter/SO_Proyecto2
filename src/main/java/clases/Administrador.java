@@ -37,8 +37,19 @@ public class Administrador extends Thread {
         this.mutex = mutex;
         this.ia = ia;
         this.addVehicle = false;
-        // TODO
-        // Cada timestamp chequea contador de c/vehiculo p2,p3. Si = 8 se aumenta su prioridad.
+
+        this.lambo_p1 = new Cola(1, "lambo");
+        this.lambo_p2 = new Cola(2, "lambo");
+        this.lambo_p3 = new Cola(3, "lambo");
+        this.lambo_r = new Cola(4, "lambo");
+
+        this.bugatti_p1 = new Cola(1, "bugatti");
+        this.bugatti_p2 = new Cola(2, "bugatti");
+        this.bugatti_p3 = new Cola(3, "bugatti");
+        this.bugatti_r = new Cola(4, "bugatti");
+
+        inicializarVehiculos("lambo");
+        inicializarVehiculos("bugatti");
     }
 
     @Override
@@ -48,17 +59,22 @@ public class Administrador extends Thread {
             try {
                 mutex.acquire();
 
-                //chequeo de colas, se pasan a la ia, añade nuevo vehiculo cada dos timestamps
+                //chequeo de colas, se pasan a la ia
                 Vehiculo lambo = chequearColasLambo();
                 ia.setLamborghini(lambo);
                 Vehiculo bugatti = chequearColasBugatti();
                 ia.setBugatti(bugatti);
 
+                //Añade nuevo vehiculo cada dos timestamps
+                añadirVehiculos();
+                
                 //40% probabilidad de sacar head de refuerzo y encolar en p1
                 chequeoRefuerzo();
 
-                //Chequea los contadores de todos los vehiculos en las colas p2 y p3 para ver si se aumneta su prioridad
-                chequeoContadores();
+                chequeoContadores(2, "lambo");
+                chequeoContadores(3, "lambo");
+                chequeoContadores(2, "bugatti");
+                chequeoContadores(3, "bugatti");
 
                 mutex.release();
             } catch (InterruptedException ex) {
@@ -71,29 +87,11 @@ public class Administrador extends Thread {
     private Vehiculo chequearColasLambo() {
         if (lambo_p3.isEmpty()) {
             if (lambo_p2.isEmpty()) {
-                if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Lamboghini", this.lambo_id);
-                    this.lambo_p1.encolar(nuevo);
-                    this.lambo_id++;
-                    this.addVehicle = !this.addVehicle;
-                }
                 return lambo_p1.readHead();
             } else {
-                if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Lamboghini", this.lambo_id);
-                    this.lambo_p2.encolar(nuevo);
-                    this.lambo_id++;
-                    this.addVehicle = !this.addVehicle;
-                }
                 return lambo_p2.readHead();
             }
         } else {
-            if (this.addVehicle) {
-                Vehiculo nuevo = new Vehiculo("Lamboghini", this.lambo_id);
-                this.lambo_p3.encolar(nuevo);
-                this.lambo_id++;
-                this.addVehicle = !this.addVehicle;
-            }
             return lambo_p3.readHead();
         }
     }
@@ -101,29 +99,11 @@ public class Administrador extends Thread {
     private Vehiculo chequearColasBugatti() {
         if (bugatti_p3.isEmpty()) {
             if (bugatti_p2.isEmpty()) {
-                if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Bugatti", this.bugatti_id);
-                    this.bugatti_p1.encolar(nuevo);
-                    this.bugatti_id++;
-                    this.addVehicle = !this.addVehicle;
-                }
                 return bugatti_p1.readHead();
             } else {
-                if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Bugatti", this.bugatti_id);
-                    this.bugatti_p2.encolar(nuevo);
-                    this.bugatti_id++;
-                    this.addVehicle = !this.addVehicle;
-                }
                 return bugatti_p2.readHead();
             }
         } else {
-            if (this.addVehicle) {
-                Vehiculo nuevo = new Vehiculo("Bugatti", this.bugatti_id);
-                this.bugatti_p3.encolar(nuevo);
-                this.bugatti_id++;
-                this.addVehicle = !this.addVehicle;
-            }
             return bugatti_p3.readHead();
         }
     }
@@ -150,8 +130,158 @@ public class Administrador extends Thread {
         }
     }
 
-    private void chequeoContadores() {
+    private void chequeoContadores(int prioridad, String marca) {
+        switch (prioridad) {
+            case 2 -> {
+                if (marca.equals("lambo")) {
 
+                    Vehiculo vehiculo = this.lambo_p2.readHead();
+                    Cola auxp2 = new Cola(2, "lambo");
+                    while (vehiculo != null) {
+                        this.lambo_p2.desencolar();
+                        if (vehiculo.contador >= 8) {
+                            this.lambo_p1.encolar(vehiculo);
+                            vehiculo.contador = 0;
+                        } else {
+                            auxp2.encolar(vehiculo);
+                        }
+                    }
+                    this.lambo_p2 = auxp2;
+
+                } else if (marca.equals("bugatti")) {
+
+                    Vehiculo vehiculo = this.bugatti_p2.readHead();
+                    Cola auxp2 = new Cola(2, "bugatti");
+                    while (vehiculo != null) {
+                        this.bugatti_p2.desencolar();
+                        if (vehiculo.contador >= 8) {
+                            this.bugatti_p1.encolar(vehiculo);
+                            vehiculo.contador = 0;
+                        } else {
+                            auxp2.encolar(vehiculo);
+                        }
+                    }
+                    this.bugatti_p2 = auxp2;
+
+                } else {
+                    System.out.println("marca erronea método chequeoContadores");
+                }
+                break;
+            }
+            case 3 -> {
+                if (marca.equals("lambo")) {
+
+                    Vehiculo vehiculo = this.lambo_p3.readHead();
+                    Cola auxp2 = new Cola(3, "lambo");
+                    while (vehiculo != null) {
+                        this.lambo_p3.desencolar();
+                        if (vehiculo.contador >= 8) {
+                            this.lambo_p2.encolar(vehiculo);
+                            vehiculo.contador = 0;
+                        } else {
+                            auxp2.encolar(vehiculo);
+                        }
+                    }
+                    this.lambo_p3 = auxp2;
+
+                } else if (marca.equals("bugatti")) {
+
+                    Vehiculo vehiculo = this.bugatti_p3.readHead();
+                    Cola auxp2 = new Cola(3, "bugatti");
+                    while (vehiculo != null) {
+                        this.bugatti_p3.desencolar();
+                        if (vehiculo.contador >= 8) {
+                            this.bugatti_p2.encolar(vehiculo);
+                            vehiculo.contador = 0;
+                        } else {
+                            auxp2.encolar(vehiculo);
+                        }
+                    }
+                    this.bugatti_p3 = auxp2;
+
+                } else {
+                    System.out.println("marca erronea método chequeoContadores");
+                }
+                break;
+            }
+            default ->
+                System.out.println("prioridad erronea método chequeoContadores");
+        }
+    }
+
+    //
+    private void inicializarVehiculos(String marca) {
+        if (marca.equals("lambo")) {
+            for (int i = 1; i < 11; i++) {
+                Vehiculo vehiculo = new Vehiculo("Lamborghini", i);
+                switch (vehiculo.cola_prioridad) {
+                    case 1 -> {
+                        this.lambo_p1.encolar(vehiculo);
+                    }
+                    case 2 -> {
+                        this.lambo_p2.encolar(vehiculo);
+                    }
+                    case 3 -> {
+                        this.lambo_p3.encolar(vehiculo);
+                    }
+                    default -> System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango lambo");
+                }
+            }
+            this.lambo_id = 11;
+        } else if (marca.equals("bugatti")) {
+            for (int i = 1; i < 11; i++) {
+                Vehiculo vehiculo = new Vehiculo("Bugatti", i);
+                switch(vehiculo.cola_prioridad) {
+                    case 1 -> {
+                        this.bugatti_p1.encolar(vehiculo);
+                    }
+                    case 2 -> {
+                        this.bugatti_p2.encolar(vehiculo);
+                    }
+                    case 3 -> {
+                        this.bugatti_p3.encolar(vehiculo);
+                    }
+                    default -> System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango bugatti");
+                }
+            }
+        } else {
+            System.out.println("Error de marca método inicializarVehiculos()");
+        }
+    }
+
+    private void añadirVehiculos() {
+        if (this.addVehicle) {
+            Vehiculo lambo = new Vehiculo("Lamborghini", this.lambo_id);
+            this.lambo_id++;
+            switch(lambo.cola_prioridad) {
+                    case 1 -> {
+                        this.bugatti_p1.encolar(lambo);
+                    }
+                    case 2 -> {
+                        this.bugatti_p2.encolar(lambo);
+                    }
+                    case 3 -> {
+                        this.bugatti_p3.encolar(lambo);
+                    }
+                    default -> System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango lambo");
+                }
+            
+            Vehiculo bugatti = new Vehiculo("Bugatti", this.bugatti_id);
+            this.bugatti_id++;
+            switch(bugatti.cola_prioridad) {
+                    case 1 -> {
+                        this.bugatti_p1.encolar(bugatti);
+                    }
+                    case 2 -> {
+                        this.bugatti_p2.encolar(bugatti);
+                    }
+                    case 3 -> {
+                        this.bugatti_p3.encolar(bugatti);
+                    }
+                    default -> System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango bugatti");
+                }
+        }
+        this.addVehicle = !this.addVehicle;
     }
 
 }
