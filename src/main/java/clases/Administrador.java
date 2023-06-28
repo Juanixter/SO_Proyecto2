@@ -72,7 +72,7 @@ public class Administrador extends Thread {
         if (lambo_p3.isEmpty()) {
             if (lambo_p2.isEmpty()) {
                 if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Lamboghini", "a", this.lambo_id);
+                    Vehiculo nuevo = new Vehiculo("Lamboghini", this.lambo_id);
                     this.lambo_p1.encolar(nuevo);
                     this.lambo_id++;
                     this.addVehicle = !this.addVehicle;
@@ -80,7 +80,7 @@ public class Administrador extends Thread {
                 return lambo_p1.readHead();
             } else {
                 if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Lamboghini", "a", this.lambo_id);
+                    Vehiculo nuevo = new Vehiculo("Lamboghini", this.lambo_id);
                     this.lambo_p2.encolar(nuevo);
                     this.lambo_id++;
                     this.addVehicle = !this.addVehicle;
@@ -89,7 +89,7 @@ public class Administrador extends Thread {
             }
         } else {
             if (this.addVehicle) {
-                Vehiculo nuevo = new Vehiculo("Lamboghini", "a", this.lambo_id);
+                Vehiculo nuevo = new Vehiculo("Lamboghini", this.lambo_id);
                 this.lambo_p3.encolar(nuevo);
                 this.lambo_id++;
                 this.addVehicle = !this.addVehicle;
@@ -102,7 +102,7 @@ public class Administrador extends Thread {
         if (bugatti_p3.isEmpty()) {
             if (bugatti_p2.isEmpty()) {
                 if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Bugatti", "a", this.bugatti_id);
+                    Vehiculo nuevo = new Vehiculo("Bugatti", this.bugatti_id);
                     this.bugatti_p1.encolar(nuevo);
                     this.bugatti_id++;
                     this.addVehicle = !this.addVehicle;
@@ -110,7 +110,7 @@ public class Administrador extends Thread {
                 return bugatti_p1.readHead();
             } else {
                 if (this.addVehicle) {
-                    Vehiculo nuevo = new Vehiculo("Bugatti", "a", this.bugatti_id);
+                    Vehiculo nuevo = new Vehiculo("Bugatti", this.bugatti_id);
                     this.bugatti_p2.encolar(nuevo);
                     this.bugatti_id++;
                     this.addVehicle = !this.addVehicle;
@@ -119,7 +119,7 @@ public class Administrador extends Thread {
             }
         } else {
             if (this.addVehicle) {
-                Vehiculo nuevo = new Vehiculo("Bugatti", "a", this.bugatti_id);
+                Vehiculo nuevo = new Vehiculo("Bugatti", this.bugatti_id);
                 this.bugatti_p3.encolar(nuevo);
                 this.bugatti_id++;
                 this.addVehicle = !this.addVehicle;

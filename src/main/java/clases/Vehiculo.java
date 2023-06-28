@@ -16,37 +16,46 @@ public class Vehiculo {
     String calidad; 
     
     String marca;    //Esto indica si es Bugatti o Lamborghini
-    String nombre;
     int id;
     int cola_prioridad;              
     double calidadRueda;
     double calidadMotor;
     double calidadCarroceria;
     double calidadChasis;  
-    boolean puede_pasar;
+    boolean puede_pasar; 
     
-    
-    public Vehiculo(String marca,String nombre,int id) {
+    public Vehiculo(String marca,int id) {
         this.contador = 0;
         this.next = null;
         this.calidad = "Sin calidad asignada"; 
         this.puede_pasar = false;
                 
         this.marca = marca;
-        this.nombre = nombre;
         this.id = id; 
         this.calidadRueda = ruedaCalidad();
         this.calidadMotor = motorCalidad();
         this.calidadCarroceria = carroceriaCalidad();
         this.calidadChasis = chasisCalidad();
         
-        this.cola_prioridad = colaInicial(this.calidadRueda, this.calidadMotor, this.calidadCarroceria, this.calidadChasis);    
+        this.cola_prioridad = colaInicial(this.calidadRueda, this.calidadMotor, this.calidadCarroceria, this.calidadChasis);  
+        
     }
     
     public void aumentar_contador() {
-        //cada vez que se complete una ronda en la inteligencia artificial.
+        if (this.cola_prioridad == 2 || this.cola_prioridad == 3) {
+            //codigo para indicar que se ha completado una ronda de la inteligencia artificial
+            this.contador++;               
+        }
+    }
+     
+    public void chequear_contador(Vehiculo v, Cola cola_baja, Cola cola_alta) {  
+        if (v.contador == 8) {
+            contador = 0;
+            Cola.subir_cola(v, cola_baja, cola_alta);         
+        } 
     }
     
+
     private double ruedaCalidad() {
        Random randomRueda = new Random();
        int nroAleatorioRueda = (int) (randomRueda.nextInt(100) + 1);
@@ -127,7 +136,7 @@ public class Vehiculo {
  
     
     public void info1() {
-        System.out.println("El vehiculo: "+this.nombre+" de la marca: "+this.marca+" de id: "+this.id+ " esta compitiendo");
+        System.out.println("El vehiculo de la marca: " +this.marca+ " de id: "+this.id+ " esta compitiendo");
     }
     
     public void info2() {
