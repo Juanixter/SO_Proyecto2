@@ -4,7 +4,10 @@
  */
 package Pantallas;
 
+import clases.Cola;
 import clases.Funciones;
+import clases.Vehiculo;
+import java.util.concurrent.Semaphore;
 
 /**
  *
@@ -12,9 +15,21 @@ import clases.Funciones;
  */
 public class Pantalla extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Pantalla
-     */
+    public Semaphore mutex;
+    
+    public Cola lambo_p1;
+    public Cola lambo_p2;
+    public Cola lambo_p3;
+    public Cola lambo_r;
+    
+    public Cola bugatti_p1;
+    public Cola bugatti_p2;
+    public Cola bugatti_p3;
+    public Cola bugatti_r;
+    
+    public Vehiculo lamborghini;
+    public Vehiculo bugatti; 
+    
     public Pantalla() {
         initComponents();
         addComponents();
@@ -56,7 +71,7 @@ public class Pantalla extends javax.swing.JFrame {
         pistaImg = new javax.swing.JLabel();
         timeL = new javax.swing.JLabel();
         timeB = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        estadoIA = new javax.swing.JLabel();
         right = new javax.swing.JPanel();
         roundedPanel4 = new Pantallas.RoundedPanel();
         bugattiP1Label = new javax.swing.JLabel();
@@ -72,6 +87,8 @@ public class Pantalla extends javax.swing.JFrame {
         SliderLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        labelGanadoresBugatti = new javax.swing.JLabel();
+        labelGanadoresLambo = new javax.swing.JLabel();
         nroGanadoresBugatti = new javax.swing.JLabel();
         nroGanadoresLambo = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -244,9 +261,9 @@ public class Pantalla extends javax.swing.JFrame {
         timeB.setForeground(new java.awt.Color(0, 0, 0));
         timeB.setText("00:00");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        estadoIA.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        estadoIA.setForeground(new java.awt.Color(0, 0, 0));
+        estadoIA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout roundedPanel2Layout = new javax.swing.GroupLayout(roundedPanel2);
         roundedPanel2.setLayout(roundedPanel2Layout);
@@ -276,7 +293,7 @@ public class Pantalla extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, roundedPanel2Layout.createSequentialGroup()
                         .addComponent(timeL)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(estadoIA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(timeB))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -300,11 +317,10 @@ public class Pantalla extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(timeL)
-                        .addComponent(jLabel2))
-                    .addComponent(timeB))
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(timeL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(timeB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(estadoIA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -421,13 +437,21 @@ public class Pantalla extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Ganadores:");
 
-        nroGanadoresBugatti.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        nroGanadoresBugatti.setForeground(new java.awt.Color(0, 0, 0));
-        nroGanadoresBugatti.setText("Bugatti:");
+        labelGanadoresBugatti.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        labelGanadoresBugatti.setForeground(new java.awt.Color(0, 0, 0));
+        labelGanadoresBugatti.setText("Bugatti:");
 
-        nroGanadoresLambo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        labelGanadoresLambo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        labelGanadoresLambo.setForeground(new java.awt.Color(0, 0, 0));
+        labelGanadoresLambo.setText("Lamborghini:");
+
+        nroGanadoresBugatti.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        nroGanadoresBugatti.setForeground(new java.awt.Color(0, 0, 0));
+        nroGanadoresBugatti.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        nroGanadoresLambo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         nroGanadoresLambo.setForeground(new java.awt.Color(0, 0, 0));
-        nroGanadoresLambo.setText("Lamborghini:");
+        nroGanadoresLambo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -436,13 +460,19 @@ public class Pantalla extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(labelGanadoresLambo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelGanadoresBugatti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nroGanadoresBugatti)
-                            .addComponent(nroGanadoresLambo))))
-                .addContainerGap(75, Short.MAX_VALUE))
+                            .addComponent(nroGanadoresBugatti, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                            .addComponent(nroGanadoresLambo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -450,9 +480,13 @@ public class Pantalla extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nroGanadoresBugatti)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelGanadoresBugatti)
+                    .addComponent(nroGanadoresBugatti, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nroGanadoresLambo)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelGanadoresLambo)
+                    .addComponent(nroGanadoresLambo, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -463,6 +497,7 @@ public class Pantalla extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Cola de ganadores:");
 
+        colaGanadores.setEditable(false);
         colaGanadores.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -608,19 +643,21 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JTextField bugattiP6;
     private javax.swing.JTextField bugattiR;
     private javax.swing.JLabel bugattiRLabel;
-    private javax.swing.JTextField colaGanadores;
-    private javax.swing.JLabel estadoB;
-    private javax.swing.JLabel estadoL;
+    public javax.swing.JTextField colaGanadores;
+    public javax.swing.JLabel estadoB;
+    public javax.swing.JLabel estadoIA;
+    public javax.swing.JLabel estadoL;
     private javax.swing.JPanel footer;
     private javax.swing.JPanel header;
-    private javax.swing.JLabel idBugatti;
-    private javax.swing.JLabel idLambo;
+    public javax.swing.JLabel idBugatti;
+    public javax.swing.JLabel idLambo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel labelGanadoresBugatti;
+    private javax.swing.JLabel labelGanadoresLambo;
     private javax.swing.JLabel lamboImg;
     private javax.swing.JTextField lamboP1;
     private javax.swing.JLabel lamboP1Label;
@@ -631,16 +668,16 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JTextField lamboR;
     private javax.swing.JLabel lamboRLabel;
     private javax.swing.JPanel left;
-    private javax.swing.JLabel nroGanadoresBugatti;
-    private javax.swing.JLabel nroGanadoresLambo;
-    private javax.swing.JLabel pistaImg;
+    public javax.swing.JLabel nroGanadoresBugatti;
+    public javax.swing.JLabel nroGanadoresLambo;
+    public javax.swing.JLabel pistaImg;
     private javax.swing.JPanel right;
     private Pantallas.RoundedPanel roundedPanel1;
     private Pantallas.RoundedPanel roundedPanel2;
     private Pantallas.RoundedPanel roundedPanel3;
     private Pantallas.RoundedPanel roundedPanel4;
-    private javax.swing.JLabel timeB;
-    private javax.swing.JLabel timeL;
+    public javax.swing.JLabel timeB;
+    public javax.swing.JLabel timeL;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 
@@ -649,5 +686,13 @@ public class Pantalla extends javax.swing.JFrame {
         Funciones.setWindowIcon(this, "logo.jpg");
         Funciones.scaleImage(this.bugattiImg, "bugatti.png");
         Funciones.scaleImage(this.lamboImg, "lambo.png");
+        this.lambo_p1 = new Cola(1, "lambo");
+        this.lambo_p2 = new Cola(2, "lambo");
+        this.lambo_p3 = new Cola(3, "lambo");
+        this.lambo_r = new Cola(4, "lambo");
+        this.bugatti_p1 = new Cola(1, "bugatti");
+        this.bugatti_p2 = new Cola(2, "bugatti");
+        this.bugatti_p3 = new Cola(3, "bugatti");
+        this.bugatti_r = new Cola(4, "bugatti");
     }
 }

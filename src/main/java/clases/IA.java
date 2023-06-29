@@ -4,11 +4,12 @@
  */
 package clases;
 
+import Pantallas.Pantalla;
+import java.awt.Color;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
 
 /**
  *
@@ -18,33 +19,17 @@ public class IA extends Thread{
     
     public Semaphore mutex;
     public int segundos;
-    private Administrador admin;
-    
-    public JLabel pista;
-    public JLabel estadoIA;
-    public JLabel estadoL;
-    public JLabel estadoB;
-    public JLabel idLambo;
-    public JLabel idBugatti;
-    public JLabel timeL;
-    public JLabel timeB;
-    public JLabel nroGanadoresL;
-    public JLabel nroGanadoresB;
-    public JLabel listaGanadores;
-    
-    private Vehiculo lamborghini;
-    private Vehiculo bugatti;  
+    public Pantalla pantalla;
     
     private float climaL;
     private float climaB;
     private float terrenoL;
     private float terrenoB;
     
-    public IA(Semaphore mutex, JLabel pista, JLabel estadoIA, JLabel estadoL, JLabel estadoB, JLabel idLambo, JLabel idBugatti, JLabel timeL, JLabel timeB, JLabel nroGanadoresL, JLabel nroGanadoresB, JLabel listaGanadores) {
+    public IA(Semaphore mutex, Pantalla pantalla) {
         this.mutex = mutex;
         this.segundos = 10;
-        this.pista = pista;
-        this.estadoIA = estadoIA;
+        this.pantalla = pantalla;
     }
     
     @Override
@@ -54,6 +39,7 @@ public class IA extends Thread{
                 mutex.acquire();
                 seleccionarPista();
                 ejecutarSimulacion();
+                restaurarValores();
                 
                 
                 mutex.release();
@@ -63,81 +49,137 @@ public class IA extends Thread{
         }
     }
 
-    /**
-     * @param lamborghini the lamborghini to set
-     */
-    public void setLamborghini(Vehiculo lamborghini) {
-        this.lamborghini = lamborghini;
-    }
-
-    /**
-     * @param bugatti the bugatti to set
-     */
-    public void setBugatti(Vehiculo bugatti) {
-        this.bugatti = bugatti;
-    }
-
     private void ejecutarSimulacion() {
-        estadoIA.setText("Decidiendo");
+        pantalla.estadoIA.setText("Decidiendo");
         Random random = new Random();        
         float prob = random.nextFloat(1);
         try {
-            sleep(this.segundos * 1000);
+            sleep(this.segundos * 1000);  // espera de 10 seg ajustable con el jslider
         } catch (InterruptedException ex) {
             Logger.getLogger(IA.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         if (prob <= 0.4) {  //Caso hay un ganador
+            pantalla.estadoIA.setText("Seleccionando ganador");
+            int nroGanadoresB = Integer.parseInt(pantalla.nroGanadoresBugatti.getText());
+            int nroGanadoresL = Integer.parseInt(pantalla.nroGanadoresLambo.getText());
+            String colaGanadores = pantalla.colaGanadores.getText();
             
+            float ptosLambo = (float) ((pantalla.lamborghini.calidadRueda * this.terrenoL) + pantalla.lamborghini.calidadMotor + (pantalla.lamborghini.calidadChasis + pantalla.lamborghini.calidadCarroceria) * this.climaL);
+            float ptosBugatti = (float) ((pantalla.bugatti.calidadRueda * this.terrenoB) + pantalla.bugatti.calidadMotor + (pantalla.bugatti.calidadChasis + pantalla.bugatti.calidadCarroceria) * this.climaB);
+            
+            if (ptosLambo > ptosBugatti) {
+                pantalla.estadoL.setText("Ganador");
+                pantalla.estadoL.setForeground(Color.GREEN);
+                pantalla.estadoB.setText("Perdedor");
+                pantalla.estadoB.setForeground(Color.BLUE);
+                pantalla.estadoIA.setText("Selección completa");
+                
+                nroGanadoresL++;
+                if (colaGanadores.equals("")) {
+                    colaGanadores = "L" + pantalla.lamborghini.id;
+                } else {
+                    colaGanadores = colaGanadores + ",L" + pantalla.lamborghini.id;
+                }
+                
+            } else if (ptosBugatti > ptosLambo) {
+                pantalla.estadoB.setText("Ganador");
+                pantalla.estadoB.setForeground(Color.GREEN);
+                pantalla.estadoL.setText("Perdedor");
+                pantalla.estadoL.setForeground(Color.BLUE);
+                pantalla.estadoIA.setText("Selección completa");
+                
+                nroGanadoresB++;
+                if (colaGanadores.equals("")) {
+                    colaGanadores = "B" + pantalla.bugatti.id;
+                } else {
+                    colaGanadores = colaGanadores + ",B" + pantalla.bugatti.id;
+                }
+            } else {  // DEBERIA de ser muy raro que empaten, pero bueno si pasa, gana bugatti porque es mejor o sea indiscutible
+                pantalla.estadoB.setText("A");
+                pantalla.estadoB.setForeground(Color.MAGENTA);
+                pantalla.estadoL.setText("A");
+                pantalla.estadoL.setForeground(Color.MAGENTA);
+                pantalla.estadoIA.setText("A...");
+                
+                nroGanadoresB++;
+                if (colaGanadores.equals("")) {
+                    colaGanadores = "B" + pantalla.bugatti.id;
+                } else {
+                    colaGanadores = colaGanadores + ",B" + pantalla.bugatti.id;
+                }
+            }
+            
+            pantalla.nroGanadoresBugatti.setText(String.valueOf(nroGanadoresB));
+            pantalla.nroGanadoresLambo.setText(String.valueOf(nroGanadoresL));
+            pantalla.colaGanadores.setText(colaGanadores);
         } else if (prob <= 0.67) {  //Caso empate
+            pantalla.estadoIA.setText("Hubo empate");
+            pantalla.estadoL.setText("Empate");
+            pantalla.estadoL.setForeground(Color.DARK_GRAY);
+            pantalla.estadoB.setText("Empate");
+            pantalla.estadoB.setForeground(Color.DARK_GRAY);
             
+            pantalla.lambo_p1.encolar(pantalla.lamborghini);
+            pantalla.bugatti_p1.encolar(pantalla.bugatti);
         } else { //Caso no ocurre la carrera
-            estadoIA.setText("Fallo de vehiculos");
+            pantalla.estadoIA.setText("Fallo de vehiculos");
+            pantalla.estadoL.setText("Falló");
+            pantalla.estadoL.setForeground(Color.red);
+            pantalla.estadoB.setText("Falló");
+            pantalla.estadoB.setForeground(Color.red);
             
+            pantalla.lambo_r.encolar(pantalla.lamborghini);
+            pantalla.bugatti_r.encolar(pantalla.bugatti);
+        }
+        try {
+            sleep(2000); //espera 2 segs para ver los resultados de la simulacion
+        } catch (InterruptedException ex) {
+            Logger.getLogger(IA.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void seleccionarPista() {
-        estadoIA.setText("Seleccionando la pista");
+        pantalla.estadoIA.setText("Seleccionando la pista");
         try {
-            sleep(4000);
+            sleep(2000); //siempre espera 2 seg seleccionando pista
         } catch (InterruptedException ex) {
             Logger.getLogger(IA.class.getName()).log(Level.SEVERE, null, ex);
         }
         Random random = new Random();
         int prob = random.nextInt(60) + 1;
         if (prob <= 10) {
-            Funciones.scaleImage(this.pista, "pista1.PNG");
+            Funciones.scaleImage(pantalla.pistaImg, "pista1.PNG");
             this.climaL = (float) 1.60;
             this.climaB = 1;
             this.terrenoL = 1;
             this.terrenoB = (float) 1.40;
         } else if (prob <= 20) {
-            Funciones.scaleImage(this.pista, "pista2.PNG");
+            Funciones.scaleImage(pantalla.pistaImg, "pista2.PNG");
             this.climaL = (float) 1.40;
             this.climaB = 1;
             this.terrenoL = (float) 1.60;
             this.terrenoB = 1;
         } else if (prob <= 30) {
-            Funciones.scaleImage(this.pista, "pista3.PNG");
+            Funciones.scaleImage(pantalla.pistaImg, "pista3.PNG");
             this.climaL = (float) 1.20;
             this.climaB = 1;
             this.terrenoL = 1;
             this.terrenoB = (float) 1.20;
         } else if (prob <= 40) {
-            Funciones.scaleImage(this.pista, "pista4.PNG");
+            Funciones.scaleImage(pantalla.pistaImg, "pista4.PNG");
             this.climaL = 1;
             this.climaB = (float) 1.60;
             this.terrenoL = (float) 1.40;
             this.terrenoB = 1;
         } else if (prob <= 50) {
-            Funciones.scaleImage(this.pista, "pista5.PNG");
+            Funciones.scaleImage(pantalla.pistaImg, "pista5.PNG");
             this.climaL = 1;
             this.climaB = (float) 1.40;
             this.terrenoL = 1;
             this.terrenoB = (float) 1.60;
         } else {
-            Funciones.scaleImage(this.pista, "pista6.PNG");
+            Funciones.scaleImage(pantalla.pistaImg, "pista6.PNG");
             this.climaL = 1;
             this.climaB = (float) 1.20;
             this.terrenoL = (float) 1.20;
@@ -145,11 +187,12 @@ public class IA extends Thread{
         }
     }
 
-    /**
-     * @param admin the admin to set
-     */
-    public void setAdmin(Administrador admin) {
-        this.admin = admin;
+    private void restaurarValores() {
+        pantalla.estadoB.setText("Esperando");
+        pantalla.estadoL.setText("Esperando");
+        pantalla.estadoIA.setText("Esperando Admin");
+        pantalla.timeB.setText("00:00");
+        pantalla.timeL.setText("00:00");
     }
     
 }

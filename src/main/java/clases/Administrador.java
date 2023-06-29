@@ -4,6 +4,7 @@
  */
 package clases;
 
+import Pantallas.Pantalla;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -16,39 +17,19 @@ import java.util.logging.Logger;
 public class Administrador extends Thread {
 
     public Semaphore mutex;
-    private IA ia;
     private boolean addVehicle;
+    private Pantalla pantalla;
 
-    //Colas de prioridad de lamborghini
-    private Cola lambo_p1;
-    private Cola lambo_p2;
-    private Cola lambo_p3;
-    private Cola lambo_r;
+    //id de siguiente lambo
     private int lambo_id;
 
-    //Colas de prioridad de bugatti
-    private Cola bugatti_p1;
-    private Cola bugatti_p2;
-    private Cola bugatti_p3;
-    private Cola bugatti_r;
+    //id de siguiente bugatti
     private int bugatti_id;
-    
-    private String ganadores;
 
-    public Administrador(Semaphore mutex, IA ia) {
+    public Administrador(Semaphore mutex, Pantalla pantalla) {
         this.mutex = mutex;
-        this.ia = ia;
         this.addVehicle = false;
-
-        this.lambo_p1 = new Cola(1, "lambo");
-        this.lambo_p2 = new Cola(2, "lambo");
-        this.lambo_p3 = new Cola(3, "lambo");
-        this.lambo_r = new Cola(4, "lambo");
-
-        this.bugatti_p1 = new Cola(1, "bugatti");
-        this.bugatti_p2 = new Cola(2, "bugatti");
-        this.bugatti_p3 = new Cola(3, "bugatti");
-        this.bugatti_r = new Cola(4, "bugatti");
+        this.pantalla = pantalla;
 
         inicializarVehiculos("lambo");
         inicializarVehiculos("bugatti");
@@ -63,9 +44,11 @@ public class Administrador extends Thread {
 
                 //chequeo de colas, se pasan a la ia
                 Vehiculo lambo = chequearColasLambo();
-                ia.setLamborghini(lambo);
+                pantalla.lamborghini = lambo;
+                pantalla.idLambo.setText(String.valueOf(lambo.id));
                 Vehiculo bugatti = chequearColasBugatti();
-                ia.setBugatti(bugatti);
+                pantalla.bugatti = bugatti;
+                pantalla.idBugatti.setText(String.valueOf(bugatti.id));
 
                 //Añade nuevo vehiculo cada dos timestamps
                 añadirVehiculos();
@@ -87,47 +70,54 @@ public class Administrador extends Thread {
     }
 
     private Vehiculo chequearColasLambo() {
-        if (lambo_p3.isEmpty()) {
-            if (lambo_p2.isEmpty()) {
-                return lambo_p1.readHead();
+        Vehiculo vehiculo;
+        if (pantalla.lambo_p1.isEmpty()) {
+            if (pantalla.lambo_p2.isEmpty()) {
+                vehiculo = pantalla.lambo_p3.readHead();
+                pantalla.lambo_p3.desencolar();
             } else {
-                return lambo_p2.readHead();
+                vehiculo = pantalla.lambo_p2.readHead();
+                pantalla.lambo_p2.desencolar();
             }
         } else {
-            return lambo_p3.readHead();
+            vehiculo = pantalla.lambo_p1.readHead();
+            pantalla.lambo_p1.desencolar();
         }
+        return vehiculo;
     }
 
     private Vehiculo chequearColasBugatti() {
-        if (bugatti_p3.isEmpty()) {
-            if (bugatti_p2.isEmpty()) {
-                return bugatti_p1.readHead();
+        Vehiculo vehiculo;
+        if (pantalla.bugatti_p1.isEmpty()) {
+            if (pantalla.bugatti_p2.isEmpty()) {
+                vehiculo = pantalla.bugatti_p3.readHead();
             } else {
-                return bugatti_p2.readHead();
+                vehiculo = pantalla.bugatti_p2.readHead();
             }
         } else {
-            return bugatti_p3.readHead();
+            vehiculo = pantalla.bugatti_p1.readHead();
         }
+        return vehiculo;
     }
 
     private void chequeoRefuerzo() {
-        if (!lambo_r.isEmpty()) {
+        if (!pantalla.lambo_r.isEmpty()) {
             Random random = new Random();
             float prob = random.nextFloat(1);
             if (prob <= 0.4) {
-                Vehiculo chosen = lambo_r.readHead();
-                lambo_r.desencolar();
-                lambo_p1.encolar(chosen);
+                Vehiculo chosen = pantalla.lambo_r.readHead();
+                pantalla.lambo_r.desencolar();
+                pantalla.lambo_p1.encolar(chosen);
             }
         }
 
-        if (!bugatti_r.isEmpty()) {
+        if (!pantalla.bugatti_r.isEmpty()) {
             Random random = new Random();
             float prob = random.nextFloat(1);
             if (prob <= 0.4) {
-                Vehiculo chosen = bugatti_r.readHead();
-                bugatti_r.desencolar();
-                bugatti_p1.encolar(chosen);
+                Vehiculo chosen = pantalla.bugatti_r.readHead();
+                pantalla.bugatti_r.desencolar();
+                pantalla.bugatti_p1.encolar(chosen);
             }
         }
     }
@@ -137,33 +127,33 @@ public class Administrador extends Thread {
             case 2 -> {
                 if (marca.equals("lambo")) {
 
-                    Vehiculo vehiculo = this.lambo_p2.readHead();
+                    Vehiculo vehiculo = pantalla.lambo_p2.readHead();
                     Cola auxp2 = new Cola(2, "lambo");
                     while (vehiculo != null) {
-                        this.lambo_p2.desencolar();
+                        pantalla.lambo_p2.desencolar();
                         if (vehiculo.contador >= 8) {
-                            this.lambo_p1.encolar(vehiculo);
+                            pantalla.lambo_p1.encolar(vehiculo);
                             vehiculo.contador = 0;
                         } else {
                             auxp2.encolar(vehiculo);
                         }
                     }
-                    this.lambo_p2 = auxp2;
+                    pantalla.lambo_p2 = auxp2;
 
                 } else if (marca.equals("bugatti")) {
 
-                    Vehiculo vehiculo = this.bugatti_p2.readHead();
+                    Vehiculo vehiculo = pantalla.bugatti_p2.readHead();
                     Cola auxp2 = new Cola(2, "bugatti");
                     while (vehiculo != null) {
-                        this.bugatti_p2.desencolar();
+                        pantalla.bugatti_p2.desencolar();
                         if (vehiculo.contador >= 8) {
-                            this.bugatti_p1.encolar(vehiculo);
+                            pantalla.bugatti_p1.encolar(vehiculo);
                             vehiculo.contador = 0;
                         } else {
                             auxp2.encolar(vehiculo);
                         }
                     }
-                    this.bugatti_p2 = auxp2;
+                    pantalla.bugatti_p2 = auxp2;
 
                 } else {
                     System.out.println("marca erronea método chequeoContadores");
@@ -173,33 +163,33 @@ public class Administrador extends Thread {
             case 3 -> {
                 if (marca.equals("lambo")) {
 
-                    Vehiculo vehiculo = this.lambo_p3.readHead();
+                    Vehiculo vehiculo = pantalla.lambo_p3.readHead();
                     Cola auxp2 = new Cola(3, "lambo");
                     while (vehiculo != null) {
-                        this.lambo_p3.desencolar();
+                        pantalla.lambo_p3.desencolar();
                         if (vehiculo.contador >= 8) {
-                            this.lambo_p2.encolar(vehiculo);
+                            pantalla.lambo_p2.encolar(vehiculo);
                             vehiculo.contador = 0;
                         } else {
                             auxp2.encolar(vehiculo);
                         }
                     }
-                    this.lambo_p3 = auxp2;
+                    pantalla.lambo_p3 = auxp2;
 
                 } else if (marca.equals("bugatti")) {
 
-                    Vehiculo vehiculo = this.bugatti_p3.readHead();
+                    Vehiculo vehiculo = pantalla.bugatti_p3.readHead();
                     Cola auxp2 = new Cola(3, "bugatti");
                     while (vehiculo != null) {
-                        this.bugatti_p3.desencolar();
+                        pantalla.bugatti_p3.desencolar();
                         if (vehiculo.contador >= 8) {
-                            this.bugatti_p2.encolar(vehiculo);
+                            pantalla.bugatti_p2.encolar(vehiculo);
                             vehiculo.contador = 0;
                         } else {
                             auxp2.encolar(vehiculo);
                         }
                     }
-                    this.bugatti_p3 = auxp2;
+                    pantalla.bugatti_p3 = auxp2;
 
                 } else {
                     System.out.println("marca erronea método chequeoContadores");
@@ -218,13 +208,13 @@ public class Administrador extends Thread {
                 Vehiculo vehiculo = new Vehiculo("Lamborghini", i);
                 switch (vehiculo.cola_prioridad) {
                     case 1 -> {
-                        this.lambo_p1.encolar(vehiculo);
+                        pantalla.lambo_p1.encolar(vehiculo);
                     }
                     case 2 -> {
-                        this.lambo_p2.encolar(vehiculo);
+                        pantalla.lambo_p2.encolar(vehiculo);
                     }
                     case 3 -> {
-                        this.lambo_p3.encolar(vehiculo);
+                        pantalla.lambo_p3.encolar(vehiculo);
                     }
                     default ->
                         System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango lambo");
@@ -236,13 +226,13 @@ public class Administrador extends Thread {
                 Vehiculo vehiculo = new Vehiculo("Bugatti", i);
                 switch (vehiculo.cola_prioridad) {
                     case 1 -> {
-                        this.bugatti_p1.encolar(vehiculo);
+                        pantalla.bugatti_p1.encolar(vehiculo);
                     }
                     case 2 -> {
-                        this.bugatti_p2.encolar(vehiculo);
+                        pantalla.bugatti_p2.encolar(vehiculo);
                     }
                     case 3 -> {
-                        this.bugatti_p3.encolar(vehiculo);
+                        pantalla.bugatti_p3.encolar(vehiculo);
                     }
                     default ->
                         System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango bugatti");
@@ -263,13 +253,13 @@ public class Administrador extends Thread {
                 this.lambo_id++;
                 switch (lambo.cola_prioridad) {
                     case 1 -> {
-                        this.bugatti_p1.encolar(lambo);
+                        pantalla.bugatti_p1.encolar(lambo);
                     }
                     case 2 -> {
-                        this.bugatti_p2.encolar(lambo);
+                        pantalla.bugatti_p2.encolar(lambo);
                     }
                     case 3 -> {
-                        this.bugatti_p3.encolar(lambo);
+                        pantalla.bugatti_p3.encolar(lambo);
                     }
                     default ->
                         System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango lambo");
@@ -279,13 +269,13 @@ public class Administrador extends Thread {
                 this.bugatti_id++;
                 switch (bugatti.cola_prioridad) {
                     case 1 -> {
-                        this.bugatti_p1.encolar(bugatti);
+                        pantalla.bugatti_p1.encolar(bugatti);
                     }
                     case 2 -> {
-                        this.bugatti_p2.encolar(bugatti);
+                        pantalla.bugatti_p2.encolar(bugatti);
                     }
                     case 3 -> {
-                        this.bugatti_p3.encolar(bugatti);
+                        pantalla.bugatti_p3.encolar(bugatti);
                     }
                     default ->
                         System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango bugatti");
@@ -293,13 +283,6 @@ public class Administrador extends Thread {
             this.addVehicle = !this.addVehicle;
             }
         }
-    }
-
-    /**
-     * @param ia the ia to set
-     */
-    public void setIa(IA ia) {
-        this.ia = ia;
     }
 
 }
