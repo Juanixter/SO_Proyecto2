@@ -46,6 +46,17 @@ public class Pantalla extends javax.swing.JFrame {
         lamboR = new javax.swing.JTextField();
         body = new javax.swing.JPanel();
         roundedPanel2 = new Pantallas.RoundedPanel();
+        bugattiImg = new javax.swing.JLabel();
+        lamboImg = new javax.swing.JLabel();
+        idLambo = new javax.swing.JLabel();
+        idBugatti = new javax.swing.JLabel();
+        estadoL = new javax.swing.JLabel();
+        estadoB = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        pistaImg = new javax.swing.JLabel();
+        timeL = new javax.swing.JLabel();
+        timeB = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         right = new javax.swing.JPanel();
         roundedPanel4 = new Pantallas.RoundedPanel();
         bugattiP1Label = new javax.swing.JLabel();
@@ -59,6 +70,13 @@ public class Pantalla extends javax.swing.JFrame {
         footer = new javax.swing.JPanel();
         Slider = new javax.swing.JSlider();
         SliderLabel = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        nroGanadoresBugatti = new javax.swing.JLabel();
+        nroGanadoresLambo = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        colaGanadores = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simulación");
@@ -196,15 +214,98 @@ public class Pantalla extends javax.swing.JFrame {
         roundedPanel2.setBackground(new java.awt.Color(255, 255, 255));
         roundedPanel2.setPreferredSize(new java.awt.Dimension(350, 350));
 
+        idLambo.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        idLambo.setForeground(new java.awt.Color(0, 0, 0));
+        idLambo.setText("L0");
+
+        idBugatti.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        idBugatti.setForeground(new java.awt.Color(0, 0, 0));
+        idBugatti.setText("B0");
+
+        estadoL.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        estadoL.setForeground(new java.awt.Color(0, 0, 0));
+        estadoL.setText("Estado");
+
+        estadoB.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        estadoB.setForeground(new java.awt.Color(0, 0, 0));
+        estadoB.setText("Estado");
+
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        pistaImg.setPreferredSize(new java.awt.Dimension(200, 90));
+        jPanel1.add(pistaImg, new java.awt.GridBagConstraints());
+
+        timeL.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        timeL.setForeground(new java.awt.Color(0, 0, 0));
+        timeL.setText("00:00");
+
+        timeB.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        timeB.setForeground(new java.awt.Color(0, 0, 0));
+        timeB.setText("00:00");
+
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout roundedPanel2Layout = new javax.swing.GroupLayout(roundedPanel2);
         roundedPanel2.setLayout(roundedPanel2Layout);
         roundedPanel2Layout.setHorizontalGroup(
             roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGroup(roundedPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lamboImg, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bugattiImg, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(roundedPanel2Layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(roundedPanel2Layout.createSequentialGroup()
+                        .addComponent(estadoL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(estadoB))
+                    .addGroup(roundedPanel2Layout.createSequentialGroup()
+                        .addComponent(idLambo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(idBugatti)))
+                .addGap(81, 81, 81))
+            .addGroup(roundedPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, roundedPanel2Layout.createSequentialGroup()
+                        .addComponent(timeL)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(timeB))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         roundedPanel2Layout.setVerticalGroup(
             roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGroup(roundedPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lamboImg, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bugattiImg, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(idLambo)
+                    .addComponent(idBugatti))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(estadoL)
+                    .addComponent(estadoB))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(timeL)
+                        .addComponent(jLabel2))
+                    .addComponent(timeB))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         body.add(roundedPanel2, new java.awt.GridBagConstraints());
@@ -302,25 +403,123 @@ public class Pantalla extends javax.swing.JFrame {
 
         footer.setOpaque(false);
         footer.setPreferredSize(new java.awt.Dimension(1000, 100));
-        footer.setLayout(new java.awt.GridBagLayout());
 
         Slider.setBackground(new java.awt.Color(255, 255, 255));
         Slider.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         Slider.setOpaque(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        footer.add(Slider, gridBagConstraints);
 
         SliderLabel.setBackground(new java.awt.Color(255, 255, 255));
         SliderLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         SliderLabel.setForeground(new java.awt.Color(255, 255, 255));
         SliderLabel.setText("Velocidad");
         SliderLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 6, 6, 6));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        footer.add(SliderLabel, gridBagConstraints);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Ganadores:");
+
+        nroGanadoresBugatti.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        nroGanadoresBugatti.setForeground(new java.awt.Color(0, 0, 0));
+        nroGanadoresBugatti.setText("Bugatti:");
+
+        nroGanadoresLambo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        nroGanadoresLambo.setForeground(new java.awt.Color(0, 0, 0));
+        nroGanadoresLambo.setText("Lamborghini:");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nroGanadoresBugatti)
+                            .addComponent(nroGanadoresLambo))))
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nroGanadoresBugatti)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nroGanadoresLambo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Cola de ganadores:");
+
+        colaGanadores.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(colaGanadores))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 154, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colaGanadores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout footerLayout = new javax.swing.GroupLayout(footer);
+        footer.setLayout(footerLayout);
+        footerLayout.setHorizontalGroup(
+            footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(footerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
+                .addGroup(footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(footerLayout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(SliderLabel))
+                    .addComponent(Slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        footerLayout.setVerticalGroup(
+            footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(footerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(footerLayout.createSequentialGroup()
+                        .addComponent(SliderLabel)
+                        .addGap(0, 0, 0)
+                        .addComponent(Slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(141, 141, 141))
+        );
 
         javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
         Fondo.setLayout(FondoLayout);
@@ -400,6 +599,7 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JSlider Slider;
     private javax.swing.JLabel SliderLabel;
     private javax.swing.JPanel body;
+    private javax.swing.JLabel bugattiImg;
     private javax.swing.JLabel bugattiP1Label;
     private javax.swing.JLabel bugattiP2Label;
     private javax.swing.JLabel bugattiP3Label;
@@ -408,8 +608,20 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JTextField bugattiP6;
     private javax.swing.JTextField bugattiR;
     private javax.swing.JLabel bugattiRLabel;
+    private javax.swing.JTextField colaGanadores;
+    private javax.swing.JLabel estadoB;
+    private javax.swing.JLabel estadoL;
     private javax.swing.JPanel footer;
     private javax.swing.JPanel header;
+    private javax.swing.JLabel idBugatti;
+    private javax.swing.JLabel idLambo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lamboImg;
     private javax.swing.JTextField lamboP1;
     private javax.swing.JLabel lamboP1Label;
     private javax.swing.JTextField lamboP2;
@@ -419,16 +631,23 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JTextField lamboR;
     private javax.swing.JLabel lamboRLabel;
     private javax.swing.JPanel left;
+    private javax.swing.JLabel nroGanadoresBugatti;
+    private javax.swing.JLabel nroGanadoresLambo;
+    private javax.swing.JLabel pistaImg;
     private javax.swing.JPanel right;
     private Pantallas.RoundedPanel roundedPanel1;
     private Pantallas.RoundedPanel roundedPanel2;
     private Pantallas.RoundedPanel roundedPanel3;
     private Pantallas.RoundedPanel roundedPanel4;
+    private javax.swing.JLabel timeB;
+    private javax.swing.JLabel timeL;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 
     private void addComponents() {
         this.setLocationRelativeTo(null);
         Funciones.setWindowIcon(this, "logo.jpg");
+        Funciones.scaleImage(this.bugattiImg, "bugatti.png");
+        Funciones.scaleImage(this.lamboImg, "lambo.png");
     }
 }

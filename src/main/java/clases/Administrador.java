@@ -32,6 +32,8 @@ public class Administrador extends Thread {
     private Cola bugatti_p3;
     private Cola bugatti_r;
     private int bugatti_id;
+    
+    private String ganadores;
 
     public Administrador(Semaphore mutex, IA ia) {
         this.mutex = mutex;
@@ -67,7 +69,7 @@ public class Administrador extends Thread {
 
                 //Añade nuevo vehiculo cada dos timestamps
                 añadirVehiculos();
-                
+
                 //40% probabilidad de sacar head de refuerzo y encolar en p1
                 chequeoRefuerzo();
 
@@ -224,14 +226,15 @@ public class Administrador extends Thread {
                     case 3 -> {
                         this.lambo_p3.encolar(vehiculo);
                     }
-                    default -> System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango lambo");
+                    default ->
+                        System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango lambo");
                 }
             }
             this.lambo_id = 11;
         } else if (marca.equals("bugatti")) {
             for (int i = 1; i < 11; i++) {
                 Vehiculo vehiculo = new Vehiculo("Bugatti", i);
-                switch(vehiculo.cola_prioridad) {
+                switch (vehiculo.cola_prioridad) {
                     case 1 -> {
                         this.bugatti_p1.encolar(vehiculo);
                     }
@@ -241,7 +244,8 @@ public class Administrador extends Thread {
                     case 3 -> {
                         this.bugatti_p3.encolar(vehiculo);
                     }
-                    default -> System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango bugatti");
+                    default ->
+                        System.out.println("Error en inicializarVehiculos, cola_prioridad fuera de rango bugatti");
                 }
             }
         } else {
@@ -251,9 +255,13 @@ public class Administrador extends Thread {
 
     private void añadirVehiculos() {
         if (this.addVehicle) {
-            Vehiculo lambo = new Vehiculo("Lamborghini", this.lambo_id);
-            this.lambo_id++;
-            switch(lambo.cola_prioridad) {
+            Random random = new Random();
+            float prob = random.nextFloat(1);
+            if (prob <= 0.8) {
+
+                Vehiculo lambo = new Vehiculo("Lamborghini", this.lambo_id);
+                this.lambo_id++;
+                switch (lambo.cola_prioridad) {
                     case 1 -> {
                         this.bugatti_p1.encolar(lambo);
                     }
@@ -263,12 +271,13 @@ public class Administrador extends Thread {
                     case 3 -> {
                         this.bugatti_p3.encolar(lambo);
                     }
-                    default -> System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango lambo");
+                    default ->
+                        System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango lambo");
                 }
-            
-            Vehiculo bugatti = new Vehiculo("Bugatti", this.bugatti_id);
-            this.bugatti_id++;
-            switch(bugatti.cola_prioridad) {
+
+                Vehiculo bugatti = new Vehiculo("Bugatti", this.bugatti_id);
+                this.bugatti_id++;
+                switch (bugatti.cola_prioridad) {
                     case 1 -> {
                         this.bugatti_p1.encolar(bugatti);
                     }
@@ -278,10 +287,19 @@ public class Administrador extends Thread {
                     case 3 -> {
                         this.bugatti_p3.encolar(bugatti);
                     }
-                    default -> System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango bugatti");
+                    default ->
+                        System.out.println("Error en añadirVehiculos, cola_prioridad fuera de rango bugatti");
                 }
+            this.addVehicle = !this.addVehicle;
+            }
         }
-        this.addVehicle = !this.addVehicle;
+    }
+
+    /**
+     * @param ia the ia to set
+     */
+    public void setIa(IA ia) {
+        this.ia = ia;
     }
 
 }
