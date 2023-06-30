@@ -85,7 +85,9 @@ public class Cola {
     
        
     public void desencolar() {
-        this.first = first.next;
+        Vehiculo aux = first.next;
+        this.first.next = null;
+        this.first = aux;
         this.size--;
         if (first == null) {
             this.last = null;

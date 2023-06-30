@@ -4,8 +4,10 @@
  */
 package Pantallas;
 
+import clases.Administrador;
 import clases.Cola;
 import clases.Funciones;
+import clases.IA;
 import clases.Vehiculo;
 import java.util.concurrent.Semaphore;
 
@@ -16,6 +18,7 @@ import java.util.concurrent.Semaphore;
 public class Pantalla extends javax.swing.JFrame {
 
     public Semaphore mutex;
+    public int segundos;
     
     public Cola lambo_p1;
     public Cola lambo_p2;
@@ -75,11 +78,11 @@ public class Pantalla extends javax.swing.JFrame {
         right = new javax.swing.JPanel();
         roundedPanel4 = new Pantallas.RoundedPanel();
         bugattiP1Label = new javax.swing.JLabel();
-        bugattiP4 = new javax.swing.JTextField();
+        bugattiP1 = new javax.swing.JTextField();
         bugattiP2Label = new javax.swing.JLabel();
-        bugattiP5 = new javax.swing.JTextField();
+        bugattiP2 = new javax.swing.JTextField();
         bugattiP3Label = new javax.swing.JLabel();
-        bugattiP6 = new javax.swing.JTextField();
+        bugattiP3 = new javax.swing.JTextField();
         bugattiRLabel = new javax.swing.JLabel();
         bugattiR = new javax.swing.JTextField();
         footer = new javax.swing.JPanel();
@@ -340,17 +343,17 @@ public class Pantalla extends javax.swing.JFrame {
         bugattiP1Label.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 5, 5));
         roundedPanel4.add(bugattiP1Label, new java.awt.GridBagConstraints());
 
-        bugattiP4.setEditable(false);
-        bugattiP4.setBackground(new java.awt.Color(255, 255, 255));
-        bugattiP4.setColumns(12);
-        bugattiP4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        bugattiP4.setForeground(new java.awt.Color(0, 0, 0));
-        bugattiP4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        bugattiP4.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)));
+        bugattiP1.setEditable(false);
+        bugattiP1.setBackground(new java.awt.Color(255, 255, 255));
+        bugattiP1.setColumns(12);
+        bugattiP1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        bugattiP1.setForeground(new java.awt.Color(0, 0, 0));
+        bugattiP1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        bugattiP1.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        roundedPanel4.add(bugattiP4, gridBagConstraints);
+        roundedPanel4.add(bugattiP1, gridBagConstraints);
 
         bugattiP2Label.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         bugattiP2Label.setForeground(new java.awt.Color(0, 0, 0));
@@ -361,17 +364,17 @@ public class Pantalla extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         roundedPanel4.add(bugattiP2Label, gridBagConstraints);
 
-        bugattiP5.setEditable(false);
-        bugattiP5.setBackground(new java.awt.Color(255, 255, 255));
-        bugattiP5.setColumns(12);
-        bugattiP5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        bugattiP5.setForeground(new java.awt.Color(0, 0, 0));
-        bugattiP5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        bugattiP5.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)));
+        bugattiP2.setEditable(false);
+        bugattiP2.setBackground(new java.awt.Color(255, 255, 255));
+        bugattiP2.setColumns(12);
+        bugattiP2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        bugattiP2.setForeground(new java.awt.Color(0, 0, 0));
+        bugattiP2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        bugattiP2.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        roundedPanel4.add(bugattiP5, gridBagConstraints);
+        roundedPanel4.add(bugattiP2, gridBagConstraints);
 
         bugattiP3Label.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         bugattiP3Label.setForeground(new java.awt.Color(0, 0, 0));
@@ -382,17 +385,17 @@ public class Pantalla extends javax.swing.JFrame {
         gridBagConstraints.gridy = 4;
         roundedPanel4.add(bugattiP3Label, gridBagConstraints);
 
-        bugattiP6.setEditable(false);
-        bugattiP6.setBackground(new java.awt.Color(255, 255, 255));
-        bugattiP6.setColumns(12);
-        bugattiP6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        bugattiP6.setForeground(new java.awt.Color(0, 0, 0));
-        bugattiP6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        bugattiP6.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)));
+        bugattiP3.setEditable(false);
+        bugattiP3.setBackground(new java.awt.Color(255, 255, 255));
+        bugattiP3.setColumns(12);
+        bugattiP3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        bugattiP3.setForeground(new java.awt.Color(0, 0, 0));
+        bugattiP3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        bugattiP3.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        roundedPanel4.add(bugattiP6, gridBagConstraints);
+        roundedPanel4.add(bugattiP3, gridBagConstraints);
 
         bugattiRLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         bugattiRLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -421,8 +424,16 @@ public class Pantalla extends javax.swing.JFrame {
         footer.setPreferredSize(new java.awt.Dimension(1000, 100));
 
         Slider.setBackground(new java.awt.Color(255, 255, 255));
+        Slider.setMaximum(20);
+        Slider.setMinimum(1);
+        Slider.setValue(10);
         Slider.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         Slider.setOpaque(true);
+        Slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                SliderStateChanged(evt);
+            }
+        });
 
         SliderLabel.setBackground(new java.awt.Color(255, 255, 255));
         SliderLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -447,10 +458,14 @@ public class Pantalla extends javax.swing.JFrame {
 
         nroGanadoresBugatti.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         nroGanadoresBugatti.setForeground(new java.awt.Color(0, 0, 0));
+        nroGanadoresBugatti.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nroGanadoresBugatti.setText("0");
         nroGanadoresBugatti.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         nroGanadoresLambo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         nroGanadoresLambo.setForeground(new java.awt.Color(0, 0, 0));
+        nroGanadoresLambo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nroGanadoresLambo.setText("0");
         nroGanadoresLambo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -594,6 +609,10 @@ public class Pantalla extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void SliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SliderStateChanged
+        this.segundos = this.Slider.getValue();
+    }//GEN-LAST:event_SliderStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -635,12 +654,12 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JLabel SliderLabel;
     private javax.swing.JPanel body;
     private javax.swing.JLabel bugattiImg;
+    private javax.swing.JTextField bugattiP1;
     private javax.swing.JLabel bugattiP1Label;
+    private javax.swing.JTextField bugattiP2;
     private javax.swing.JLabel bugattiP2Label;
+    private javax.swing.JTextField bugattiP3;
     private javax.swing.JLabel bugattiP3Label;
-    private javax.swing.JTextField bugattiP4;
-    private javax.swing.JTextField bugattiP5;
-    private javax.swing.JTextField bugattiP6;
     private javax.swing.JTextField bugattiR;
     private javax.swing.JLabel bugattiRLabel;
     public javax.swing.JTextField colaGanadores;
@@ -694,5 +713,108 @@ public class Pantalla extends javax.swing.JFrame {
         this.bugatti_p2 = new Cola(2, "bugatti");
         this.bugatti_p3 = new Cola(3, "bugatti");
         this.bugatti_r = new Cola(4, "bugatti");
+        this.segundos = 10;
+        this.mutex = new Semaphore(1);
+        Administrador admin = new Administrador(this.mutex, this);
+        IA ia = new IA(this.mutex, this);
+        admin.start();
+        ia.start();
+    }
+    
+    public void pintarColas() {
+        Vehiculo vehiculoLp1 = this.lambo_p1.readHead();
+        Vehiculo vehiculoLp2 = this.lambo_p2.readHead();
+        Vehiculo vehiculoLp3 = this.lambo_p3.readHead();
+        Vehiculo vehiculoLr = this.lambo_r.readHead();
+        
+        String colaLp1 = "";
+        String colaLp2 = "";
+        String colaLp3 = "";
+        String colaLr = "";
+        
+        Vehiculo vehiculoBp1 = this.bugatti_p1.readHead();
+        Vehiculo vehiculoBp2 = this.bugatti_p2.readHead();
+        Vehiculo vehiculoBp3 = this.bugatti_p3.readHead();
+        Vehiculo vehiculoBr = this.bugatti_r.readHead();
+        
+        String colaBp1 = "";
+        String colaBp2 = "";
+        String colaBp3 = "";
+        String colaBr = "";
+        
+        while (vehiculoLp1 != null) {
+            if(colaLp1.equals("")) {
+                colaLp1 = "L" + String.valueOf(vehiculoLp1.id);
+            } else {
+                colaLp1 = "L" + String.valueOf(vehiculoLp1.id) + "," + colaLp1;
+            }
+            vehiculoLp1 = vehiculoLp1.next;
+        }
+        while (vehiculoLp2 != null) {
+            if(colaLp2.equals("")) {
+                colaLp2 = "L" + String.valueOf(vehiculoLp2.id);
+            } else {
+                colaLp2 = "L" + String.valueOf(vehiculoLp2.id) + "," + colaLp2;
+            }
+            vehiculoLp2 = vehiculoLp2.next;
+        }
+        while (vehiculoLp3 != null) {
+            if(colaLp3.equals("")) {
+                colaLp3 = "L" + String.valueOf(vehiculoLp3.id);
+            } else {
+                colaLp3 = "L" + String.valueOf(vehiculoLp3.id) + "," + colaLp3;
+            }
+            vehiculoLp3 = vehiculoLp3.next;
+        }
+        while (vehiculoLr != null) {
+            if(colaLr.equals("")) {
+                colaLr = "L" + String.valueOf(vehiculoLr.id);
+            } else {
+                colaLr = "L" + String.valueOf(vehiculoLr.id) + "," + colaLr;
+            }
+            vehiculoLr = vehiculoLr.next;
+        }
+        while (vehiculoBp1 != null) {
+            if(colaBp1.equals("")) {
+                colaBp1 = "B" + String.valueOf(vehiculoBp1.id);
+            } else {
+                colaBp1 = "B" + String.valueOf(vehiculoBp1.id) + "," + colaBp1;
+            }
+            vehiculoBp1 = vehiculoBp1.next;
+        }
+        while (vehiculoBp2 != null) {
+            if(colaBp2.equals("")) {
+                colaBp2 = "B" + String.valueOf(vehiculoBp2.id);
+            } else {
+                colaBp2 = "B" + String.valueOf(vehiculoBp2.id) + "," + colaBp2;
+            }
+            vehiculoBp2 = vehiculoBp2.next;
+        }
+        while (vehiculoBp3 != null) {
+            if(colaBp3.equals("")) {
+                colaBp3 = "B" + String.valueOf(vehiculoBp3.id);
+            } else {
+                colaBp3 = "B" + String.valueOf(vehiculoBp3.id) + "," + colaBp3;
+            }
+            vehiculoBp3 = vehiculoBp3.next;
+        }
+        while (vehiculoBr != null) {
+            if(colaBr.equals("")) {
+                colaBr = "B" + String.valueOf(vehiculoBr.id); 
+            } else {
+                colaBr = "B" + String.valueOf(vehiculoBr.id) + "," + colaBr;
+            }
+            vehiculoBr = vehiculoBr.next;
+        }
+        
+        this.lamboP1.setText(colaLp1);
+        this.lamboP2.setText(colaLp2);
+        this.lamboP3.setText(colaLp3);
+        this.lamboR.setText(colaLr);
+        
+        this.bugattiP1.setText(colaBp1);
+        this.bugattiP2.setText(colaBp2);
+        this.bugattiP3.setText(colaBp3);
+        this.bugattiR.setText(colaBr);
     }
 }

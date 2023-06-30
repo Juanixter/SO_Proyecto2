@@ -15,34 +15,36 @@ import java.util.logging.Logger;
  *
  * @author juanc
  */
-public class IA extends Thread{
-    
+public class IA extends Thread {
+
     public Semaphore mutex;
-    public int segundos;
     public Pantalla pantalla;
-    
+
     private float climaL;
     private float climaB;
     private float terrenoL;
     private float terrenoB;
-    
+
     public IA(Semaphore mutex, Pantalla pantalla) {
         this.mutex = mutex;
-        this.segundos = 10;
         this.pantalla = pantalla;
     }
-    
+
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             try {
                 mutex.acquire();
-                seleccionarPista();
-                ejecutarSimulacion();
-                restaurarValores();
-                
-                
+                if (pantalla.lamborghini != null) {
+
+                    seleccionarPista();
+                    ejecutarSimulacion();
+                    restaurarValores();
+                    pantalla.pintarColas();
+
+                }
                 mutex.release();
+                sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(IA.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -51,44 +53,105 @@ public class IA extends Thread{
 
     private void ejecutarSimulacion() {
         pantalla.estadoIA.setText("Decidiendo");
-        Random random = new Random();        
+        pantalla.estadoL.setText("Esperando");
+        pantalla.estadoB.setText("Esperando");
+        Random random = new Random();
         float prob = random.nextFloat(1);
+
+        int min1 = random.nextInt(60) + 1;
+        int seg1 = random.nextInt(60) + 1;
+        int min2 = random.nextInt(60) + 1;
+        int seg2 = random.nextInt(60) + 1;
+
+        String m1 = fixTime(min1);
+        String m2 = fixTime(min2);
+        String s1 = fixTime(seg1);
+        String s2 = fixTime(seg2);
+
         try {
-            sleep(this.segundos * 1000);  // espera de 10 seg ajustable con el jslider
+            sleep(pantalla.segundos * 1000);  // espera de 10 seg ajustable con el jslider
         } catch (InterruptedException ex) {
             Logger.getLogger(IA.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         if (prob <= 0.4) {  //Caso hay un ganador
             pantalla.estadoIA.setText("Seleccionando ganador");
             int nroGanadoresB = Integer.parseInt(pantalla.nroGanadoresBugatti.getText());
             int nroGanadoresL = Integer.parseInt(pantalla.nroGanadoresLambo.getText());
             String colaGanadores = pantalla.colaGanadores.getText();
-            
+
             float ptosLambo = (float) ((pantalla.lamborghini.calidadRueda * this.terrenoL) + pantalla.lamborghini.calidadMotor + (pantalla.lamborghini.calidadChasis + pantalla.lamborghini.calidadCarroceria) * this.climaL);
             float ptosBugatti = (float) ((pantalla.bugatti.calidadRueda * this.terrenoB) + pantalla.bugatti.calidadMotor + (pantalla.bugatti.calidadChasis + pantalla.bugatti.calidadCarroceria) * this.climaB);
-            
+
             if (ptosLambo > ptosBugatti) {
                 pantalla.estadoL.setText("Ganador");
                 pantalla.estadoL.setForeground(Color.GREEN);
                 pantalla.estadoB.setText("Perdedor");
                 pantalla.estadoB.setForeground(Color.BLUE);
                 pantalla.estadoIA.setText("Selección completa");
-                
+
+                String timeLambo;
+                String timeBugatti;
+                if (min1 > min2) {
+                    timeLambo = m1 + ":" + s1;
+                    timeBugatti = m2 + ":" + s2;
+                } else if (min2 > min1) {
+                    timeLambo = m2 + ":" + s1;
+                    timeBugatti = m1 + ":" + s2;
+                } else {
+                    if (seg1 > seg2) {
+                        timeLambo = m1 + ":" + s1;
+                        timeBugatti = m2 + ":" + s2;
+                    } else if (seg2 > seg1) {
+                        timeLambo = m1 + ":" + s2;
+                        timeBugatti = m2 + ":" + s1;
+                    } else {
+                        timeLambo = m1 + ":" + String.valueOf(seg1 + 1);
+                        timeBugatti = m2 + ":" + s2;
+                    }
+                }
+
+                pantalla.timeL.setText(timeLambo);
+                pantalla.timeB.setText(timeBugatti);
+
                 nroGanadoresL++;
                 if (colaGanadores.equals("")) {
                     colaGanadores = "L" + pantalla.lamborghini.id;
                 } else {
                     colaGanadores = colaGanadores + ",L" + pantalla.lamborghini.id;
                 }
-                
+
             } else if (ptosBugatti > ptosLambo) {
                 pantalla.estadoB.setText("Ganador");
                 pantalla.estadoB.setForeground(Color.GREEN);
                 pantalla.estadoL.setText("Perdedor");
                 pantalla.estadoL.setForeground(Color.BLUE);
                 pantalla.estadoIA.setText("Selección completa");
-                
+
+                String timeLambo;
+                String timeBugatti;
+                if (min1 > min2) {
+                    timeLambo = m2 + ":" + s2;
+                    timeBugatti = m1 + ":" + s1;
+                } else if (min2 > min1) {
+                    timeLambo = m1 + ":" + s2;
+                    timeBugatti = m2 + ":" + s1;
+                } else {
+                    if (seg1 > seg2) {
+                        timeLambo = m1 + ":" + s2;
+                        timeBugatti = m2 + ":" + s1;
+                    } else if (seg2 > seg1) {
+                        timeLambo = m1 + ":" + s1;
+                        timeBugatti = m2 + ":" + s2;
+                    } else {
+                        timeLambo = m1 + ":" + s1;
+                        timeBugatti = m2 + ":" + String.valueOf(seg1 + 1);
+                    }
+                }
+
+                pantalla.timeL.setText(timeLambo);
+                pantalla.timeB.setText(timeBugatti);
+
                 nroGanadoresB++;
                 if (colaGanadores.equals("")) {
                     colaGanadores = "B" + pantalla.bugatti.id;
@@ -101,7 +164,10 @@ public class IA extends Thread{
                 pantalla.estadoL.setText("A");
                 pantalla.estadoL.setForeground(Color.MAGENTA);
                 pantalla.estadoIA.setText("A...");
-                
+
+                pantalla.timeL.setText("00:00");
+                pantalla.timeB.setText("00:00");
+
                 nroGanadoresB++;
                 if (colaGanadores.equals("")) {
                     colaGanadores = "B" + pantalla.bugatti.id;
@@ -109,7 +175,7 @@ public class IA extends Thread{
                     colaGanadores = colaGanadores + ",B" + pantalla.bugatti.id;
                 }
             }
-            
+
             pantalla.nroGanadoresBugatti.setText(String.valueOf(nroGanadoresB));
             pantalla.nroGanadoresLambo.setText(String.valueOf(nroGanadoresL));
             pantalla.colaGanadores.setText(colaGanadores);
@@ -119,7 +185,13 @@ public class IA extends Thread{
             pantalla.estadoL.setForeground(Color.DARK_GRAY);
             pantalla.estadoB.setText("Empate");
             pantalla.estadoB.setForeground(Color.DARK_GRAY);
-            
+
+            String timeLambo = m1 + ":" + s1;
+            String timeBugatti = m1 + ":" + s1;
+
+            pantalla.timeL.setText(timeLambo);
+            pantalla.timeB.setText(timeBugatti);
+
             pantalla.lambo_p1.encolar(pantalla.lamborghini);
             pantalla.bugatti_p1.encolar(pantalla.bugatti);
         } else { //Caso no ocurre la carrera
@@ -128,7 +200,10 @@ public class IA extends Thread{
             pantalla.estadoL.setForeground(Color.red);
             pantalla.estadoB.setText("Falló");
             pantalla.estadoB.setForeground(Color.red);
-            
+
+            pantalla.timeL.setText("00:00");
+            pantalla.timeB.setText("00:00");
+
             pantalla.lambo_r.encolar(pantalla.lamborghini);
             pantalla.bugatti_r.encolar(pantalla.bugatti);
         }
@@ -189,10 +264,20 @@ public class IA extends Thread{
 
     private void restaurarValores() {
         pantalla.estadoB.setText("Esperando");
+        pantalla.estadoB.setForeground(Color.BLACK);
         pantalla.estadoL.setText("Esperando");
+        pantalla.estadoL.setForeground(Color.BLACK);
         pantalla.estadoIA.setText("Esperando Admin");
         pantalla.timeB.setText("00:00");
         pantalla.timeL.setText("00:00");
     }
-    
+
+    private String fixTime(int time) {
+        String result = String.valueOf(time);
+        if (result.length() == 1) {
+            result = "0" + result;
+        }
+        return result;
+    }
+
 }

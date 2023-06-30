@@ -12,11 +12,11 @@ import java.text.DecimalFormat;
  */
 public class Vehiculo {
     int contador;
-    Vehiculo next;    //Vehiculo que le sigue en su respectiva cola
+    public Vehiculo next;    //Vehiculo que le sigue en su respectiva cola
     String calidad; 
     
     String marca;    //Esto indica si es Bugatti o Lamborghini
-    int id;
+    public int id;
     int cola_prioridad;              
     double calidadRueda;
     double calidadMotor;
